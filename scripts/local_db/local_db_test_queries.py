@@ -1,11 +1,4 @@
-#!/usr/bin/env python3
-"""
-local_db_test_queries.py
-
-A script to execute SQL queries from a file on a local MySQL database.
-It connects to the database using credentials stored in a .env file and
-executes the SQL commands, printing the results.
-"""
+# scripts/local_db/local_db_test_queries.py
 
 import os
 import mysql.connector
@@ -14,7 +7,7 @@ from dotenv import load_dotenv
 
 def load_environment_variables():
     """Load environment variables from the .env file."""
-    dotenv_path = os.path.join(os.path.dirname(__file__), '../.env')
+    dotenv_path = os.path.join(os.path.dirname(__file__), '../../.env')
     if not os.path.exists(dotenv_path):
         print(f"Error: .env file not found at {dotenv_path}")
         exit(1)
@@ -31,7 +24,7 @@ def get_db_config():
         'password': os.getenv('LOCAL_DB_PASSWORD'),
     }
 
-    # Validate that all required configurations are present
+    # Validate that required configurations are present
     missing = [key for key, value in db_config.items() if value is None]
     if missing:
         print(f"Error: Missing environment variables: {', '.join(missing)}")
@@ -109,7 +102,7 @@ def main():
 
     if db_connection:
         # Define the path to the SQL file
-        sql_file_path = os.path.join(os.path.dirname(__file__), '../sql/example_queries.sql')
+        sql_file_path = os.path.join(os.path.dirname(__file__), '../../sql/example_queries.sql')
 
         # Execute queries and print the results
         execute_queries(db_connection, sql_file_path)

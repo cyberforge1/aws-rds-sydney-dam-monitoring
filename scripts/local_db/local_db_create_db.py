@@ -1,7 +1,6 @@
-# scripts/aws_rds/aws_rds_connect.py
+# scripts/local_db/local_db_create_db.py
 
 import os
-import sys
 import mysql.connector
 from mysql.connector import Error
 from dotenv import load_dotenv
@@ -12,62 +11,65 @@ def load_environment_variables():
     dotenv_path = os.path.join(os.path.dirname(__file__), '../../.env')
     if not os.path.exists(dotenv_path):
         print(f"Error: .env file not found at {dotenv_path}")
-        sys.exit(1)
+        exit(1)
     load_dotenv(dotenv_path)
 
 
 def get_db_config():
     """Retrieve database configuration from environment variables."""
     db_config = {
-        'host': os.getenv('DB_HOST'),
-        'port': int(os.getenv('DB_PORT', 3306)),
-        'database': os.getenv('DB_NAME'),
-        'user': os.getenv('DB_USER'),
-        'password': os.getenv('DB_PASSWORD'),
+        'host': os.getenv('LOCAL_DB_HOST', 'localhost'),
+        'port': int(os.getenv('LOCAL_DB_PORT', 3306)),
+        'user': os.getenv('LOCAL_DB_USER'),
+        'password': os.getenv('LOCAL_DB_PASSWORD'),
     }
 
-    # Validate that all required configurations are present
+    # Validate that required configurations are present
     missing = [key for key, value in db_config.items() if value is None]
     if missing:
         print(f"Error: Missing environment variables: {', '.join(missing)}")
-        sys.exit(1)
+        exit(1)
 
     return db_config
 
 
-def test_connection(db_config):
-    """Test the connection to the AWS RDS MySQL instance."""
+def create_database(db_name, db_config):
+    """Create a local MySQL database."""
     try:
         connection = mysql.connector.connect(
             host=db_config['host'],
             port=db_config['port'],
-            database=db_config['database'],
             user=db_config['user'],
             password=db_config['password']
         )
-
         if connection.is_connected():
-            db_info = connection.get_server_info()
-            print(f"Connected to MySQL Server version {db_info}")
+            print("Connected to MySQL Server.")
+
+            # Create the database
             cursor = connection.cursor()
-            cursor.execute("SELECT DATABASE();")
-            record = cursor.fetchone()
-            print(f"You're connected to database: {record[0]}")
+            cursor.execute(f"CREATE DATABASE IF NOT EXISTS {db_name};")
+            print(f"Database '{db_name}' has been created or already exists.")
             cursor.close()
 
     except Error as e:
-        print(f"Error while connecting to MySQL: {e}")
+        print(f"Error while creating the database: {e}")
+
     finally:
         if 'connection' in locals() and connection.is_connected():
             connection.close()
-            print("MySQL connection is closed")
+            print("MySQL connection is closed.")
 
 
 def main():
-    """Main execution block to test the AWS RDS connection."""
+    """Main execution block to create the database."""
     load_environment_variables()
+
+    # Get database configuration and the target database name
     db_config = get_db_config()
-    test_connection(db_config)
+    db_name = os.getenv('LOCAL_DB_NAME', 'sydney_dam_monitoring_local')
+
+    # Create the database
+    create_database(db_name, db_config)
 
 
 if __name__ == "__main__":
