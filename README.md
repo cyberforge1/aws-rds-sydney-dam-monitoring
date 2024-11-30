@@ -4,6 +4,7 @@
 
 Schema Design, SQL and Terraform provisioning of the AWS RDS for the Sydney Dam Monitoring Project
 
+## SQL Schema
 ```SQL
 
 CREATE TABLE dams (
