@@ -1,4 +1,10 @@
-# scripts/db_seeding.py
+#!/usr/bin/env python3
+"""
+local_db_seeding.py
+
+A script to seed a local MySQL database using an SQL file. It connects to the database
+using credentials stored in a .env file and executes the SQL commands to populate the database.
+"""
 
 import os
 import mysql.connector
@@ -12,10 +18,10 @@ DB_USER = os.getenv("DB_USER")
 DB_PASSWORD = os.getenv("DB_PASSWORD")
 DB_NAME = os.getenv("DB_NAME")
 DB_HOST = os.getenv("DB_HOST")
-DB_PORT = os.getenv("DB_PORT")
+DB_PORT = os.getenv("DB_PORT", "3306")  # Default to 3306 if not set
 
-# Function to connect to the database
 def connect_to_database():
+    """Establish a connection to the MySQL database."""
     try:
         connection = mysql.connector.connect(
             user=DB_USER,
@@ -30,8 +36,14 @@ def connect_to_database():
         print(f"Error: {err}")
         return None
 
-# Function to seed the database using an SQL file
 def seed_database_from_file(connection, sql_file_path):
+    """
+    Seed the database using an SQL file.
+
+    Args:
+        connection (mysql.connector.connection.MySQLConnection): The database connection.
+        sql_file_path (str): The path to the SQL file containing seed data.
+    """
     cursor = connection.cursor()
     try:
         # Open and read the SQL file
@@ -56,17 +68,21 @@ def seed_database_from_file(connection, sql_file_path):
     finally:
         cursor.close()
 
-# Main execution block
-if __name__ == "__main__":
+def main():
+    """Main execution block to seed the database."""
     # Connect to the database
     db_connection = connect_to_database()
 
     if db_connection:
         # Define the path to the SQL file
-        sql_file_path = "sql/example_data.sql"  # Updated path
+        sql_file_path = "sql/example_data.sql"  # Ensure this path is correct
 
         # Seed the database using the SQL file
         seed_database_from_file(db_connection, sql_file_path)
 
         # Close the connection
         db_connection.close()
+        print("Database connection closed.")
+
+if __name__ == "__main__":
+    main()
