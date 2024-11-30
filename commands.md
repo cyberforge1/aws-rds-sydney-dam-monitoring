@@ -14,18 +14,26 @@ pip install -r requirements.txt
 
 ## Local DB
 
-python3 scripts/local_db_connect.py
+python3 scripts/local_db/local_db_connect.py
 
-python3 scripts/local_db_seeding.py
+python3 scripts/local_db/local_db_create_schema.py
 
-python3 scripts/local_run_queries.py
+python3 scripts/local_db/local_db_seed_data.py
+
+python3 scripts/local_db/local_db_test_queries.py
+
 
 
 
 ## AWS RDS
 
-python3 scripts/aws_rds_connect.py
+python3 scripts/aws_rds/aws_rds_connect.py
 
+python3 scripts/aws_rds/aws_rds_create_schema.py
+
+python3 scripts/aws_rds/aws_rds_seed_data.py
+
+python3 scripts/aws_rds/aws_rds_test_queries.py
 
 
 # Terraform

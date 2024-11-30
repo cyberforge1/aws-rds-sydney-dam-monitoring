@@ -1,9 +1,10 @@
 #!/usr/bin/env python3
 """
-local_db_connect.py
+local_db_create_schema.py
 
-A script to connect to a local MySQL database instance using credentials
-stored in a .env file. It performs a simple query to verify the connection.
+A script to create the database schema in a local MySQL instance
+using credentials stored in a .env file. The SQL commands are read
+from a `sql/schema.sql` file.
 """
 
 import os
@@ -41,8 +42,30 @@ def get_db_config():
     return db_config
 
 
-def test_connection(db_config):
-    """Test the connection to the local MySQL database."""
+def execute_sql_file(connection, file_path):
+    """Execute SQL commands from a file."""
+    try:
+        with open(file_path, 'r') as file:
+            sql_commands = file.read()
+            cursor = connection.cursor()
+            for command in sql_commands.split(';'):
+                if command.strip():
+                    cursor.execute(command)
+            connection.commit()
+            print(f"Successfully executed schema from {file_path}")
+    except FileNotFoundError:
+        print(f"Error: SQL file not found at {file_path}")
+        sys.exit(1)
+    except Error as e:
+        print(f"Error while executing SQL file: {e}")
+        sys.exit(1)
+
+
+def create_schema():
+    """Connect to the local database instance and create the schema."""
+    load_environment_variables()
+    db_config = get_db_config()
+
     try:
         connection = mysql.connector.connect(
             host=db_config['host'],
@@ -53,13 +76,9 @@ def test_connection(db_config):
         )
 
         if connection.is_connected():
-            db_info = connection.get_server_info()
-            print(f"Connected to MySQL Server version {db_info}")
-            cursor = connection.cursor()
-            cursor.execute("SELECT DATABASE();")
-            record = cursor.fetchone()
-            print(f"You're connected to database: {record[0]}")
-            cursor.close()
+            print("Connected to the local database instance.")
+            sql_file_path = os.path.join(os.path.dirname(__file__), '../sql/schema.sql')
+            execute_sql_file(connection, sql_file_path)
 
     except Error as e:
         print(f"Error while connecting to MySQL: {e}")
@@ -69,12 +88,5 @@ def test_connection(db_config):
             print("MySQL connection is closed")
 
 
-def main():
-    """Main execution block to test the local MySQL database connection."""
-    load_environment_variables()
-    db_config = get_db_config()
-    test_connection(db_config)
-
-
 if __name__ == "__main__":
-    main()
+    create_schema()
