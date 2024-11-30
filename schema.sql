@@ -1,3 +1,6 @@
+-- schema.sql
+
+
 CREATE TABLE dams (
     dam_id VARCHAR(20) PRIMARY KEY,
     dam_name VARCHAR(255) NOT NULL,

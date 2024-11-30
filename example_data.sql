@@ -1,3 +1,5 @@
+-- example_data.sql
+
 INSERT INTO dams (dam_id, dam_name, full_volume, latitude, longitude) VALUES
     ('203042', 'Toonumbar Dam', 10814, -28.602383, 152.763769),
     ('210097', 'Glenbawn Dam', 748827, -32.064304, 150.982007),
