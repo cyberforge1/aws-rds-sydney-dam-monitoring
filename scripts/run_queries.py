@@ -69,7 +69,7 @@ if __name__ == "__main__":
 
     if db_connection:
         # Define the path to the SQL file
-        sql_file_path = "example_queries.sql"
+        sql_file_path = "sql/example_queries.sql"  # Updated path
 
         # Execute queries and print the results
         execute_queries(db_connection, sql_file_path)

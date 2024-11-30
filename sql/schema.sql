@@ -1,4 +1,4 @@
--- schema.sql
+-- sql/schema.sql
 
 
 CREATE TABLE dams (

@@ -1,8 +1,4 @@
--- example_queries.sql
-
--- --------------------------------------------------
--- Example Queries to Validate Data
--- --------------------------------------------------
+-- sql/example_queries.sql
 
 -- Retrieve All Dams in 'sydney_dams':
 SELECT d.*

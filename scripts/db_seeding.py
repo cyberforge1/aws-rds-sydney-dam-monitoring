@@ -63,7 +63,7 @@ if __name__ == "__main__":
 
     if db_connection:
         # Define the path to the SQL file
-        sql_file_path = "example_data.sql"
+        sql_file_path = "sql/example_data.sql"  # Updated path
 
         # Seed the database using the SQL file
         seed_database_from_file(db_connection, sql_file_path)
