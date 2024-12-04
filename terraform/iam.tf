@@ -47,7 +47,7 @@ resource "aws_iam_role_policy_attachment" "attach_rds_policy" {
   policy_arn = aws_iam_policy.rds_policy.arn
 }
 
-# Optional: Utilize AWS_ACCOUNT_ID if needed
+# Optional: Output AWS Account ID
 output "aws_account_id" {
   value = var.AWS_ACCOUNT_ID
 }

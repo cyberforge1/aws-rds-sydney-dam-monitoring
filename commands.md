@@ -45,3 +45,10 @@ terraform -chdir=terraform plan
 terraform -chdir=terraform apply
 
 terraform -chdir=terraform destroy
+
+
+## Testing
+
+terraform -chdir=terraform output rds_endpoint
+
+terraform -chdir=terraform output rds_username
